@@ -1,0 +1,7 @@
+.vscode
+cpp/*.ilk
+cpp/*.exe
+cpp/*.obj
+cpp/*.pdb
+cpp/main
+cpp/main*
