@@ -1,7 +1,9 @@
 .vscode
-cpp/*.ilk
-cpp/*.exe
-cpp/*.obj
-cpp/*.pdb
-cpp/main
-cpp/main*
+*.exe
+*.obj
+*.ilk
+*.pdb
+*.out
+*.log
+*.bin
+*.o
