@@ -1,0 +1,14 @@
+/home/folzi/cpp/cs/bin/Debug/net8.0/cs
+/home/folzi/cpp/cs/bin/Debug/net8.0/cs.deps.json
+/home/folzi/cpp/cs/bin/Debug/net8.0/cs.runtimeconfig.json
+/home/folzi/cpp/cs/bin/Debug/net8.0/cs.dll
+/home/folzi/cpp/cs/bin/Debug/net8.0/cs.pdb
+/home/folzi/cpp/cs/obj/Debug/net8.0/cs.GeneratedMSBuildEditorConfig.editorconfig
+/home/folzi/cpp/cs/obj/Debug/net8.0/cs.AssemblyInfoInputs.cache
+/home/folzi/cpp/cs/obj/Debug/net8.0/cs.AssemblyInfo.cs
+/home/folzi/cpp/cs/obj/Debug/net8.0/cs.csproj.CoreCompileInputs.cache
+/home/folzi/cpp/cs/obj/Debug/net8.0/cs.dll
+/home/folzi/cpp/cs/obj/Debug/net8.0/refint/cs.dll
+/home/folzi/cpp/cs/obj/Debug/net8.0/cs.pdb
+/home/folzi/cpp/cs/obj/Debug/net8.0/cs.genruntimeconfig.cache
+/home/folzi/cpp/cs/obj/Debug/net8.0/ref/cs.dll
