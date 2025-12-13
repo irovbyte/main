@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra -O2
-LDFLAGS = -lm
+LDFLAGS = -lm -lcurl
 
 TARGET = main
 SRC = main.cpp

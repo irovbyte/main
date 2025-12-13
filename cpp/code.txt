@@ -110,3 +110,263 @@ int main() {
 
   return 0;
 }
+
+===============================================================================
+
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+using namespace std;
+
+// Абстрактный класс
+class SteelSheet {
+protected:
+    double thickness;   // мм
+    double density;     // кг/м3
+public:
+    SteelSheet(double t, double d) : thickness(t), density(d) {}
+    virtual ~SteelSheet() {}
+
+    // Чисто виртуальный метод
+    virtual double Area() const = 0;
+
+    // Общий метод
+    double Weight() const {
+        // Площадь в мм² → переводим в м² (делим на 1e6)
+        double area_m2 = Area() / 1e6;
+        // Толщина в мм → переводим в метры (делим на 1000)
+        double thickness_m = thickness / 1000.0;
+        return area_m2 * thickness_m * density;
+    }
+
+    virtual void Info() const = 0;
+};
+
+// Квадратный лист
+class SquareSheet : public SteelSheet {
+    double side; // мм
+public:
+    SquareSheet(double s, double t, double d) : SteelSheet(t, d), side(s) {}
+    double Area() const override { return side * side; }
+    void Info() const override {
+        cout << "Квадратный лист: сторона = " << side << " мм, "
+             << "толщина = " << thickness << " мм, плотность = " << density << " кг/м3, "
+             << "площадь = " << Area() << " мм², вес = " << Weight() << " кг\n";
+    }
+};
+
+// Прямоугольный лист
+class RectangleSheet : public SteelSheet {
+    double width, length; // мм
+public:
+    RectangleSheet(double w, double l, double t, double d) : SteelSheet(t, d), width(w), length(l) {}
+    double Area() const override { return width * length; }
+    void Info() const override {
+        cout << "Прямоугольный лист: ширина = " << width << " мм, длина = " << length << " мм, "
+             << "толщина = " << thickness << " мм, плотность = " << density << " кг/м3, "
+             << "площадь = " << Area() << " мм², вес = " << Weight() << " кг\n";
+    }
+};
+
+// Треугольный лист (прямоугольный)
+class TriangleSheet : public SteelSheet {
+    double a, b; // катеты, мм
+public:
+    TriangleSheet(double a_, double b_, double t, double d) : SteelSheet(t, d), a(a_), b(b_) {}
+    double Area() const override { return 0.5 * a * b; }
+    void Info() const override {
+        cout << "Треугольный лист: катеты = " << a << " мм и " << b << " мм, "
+             << "толщина = " << thickness << " мм, плотность = " << density << " кг/м3, "
+             << "площадь = " << Area() << " мм², вес = " << Weight() << " кг\n";
+    }
+};
+
+int main() {
+    srand(time(0));
+    vector<SteelSheet*> sheets;
+
+    // 5 квадратных
+    for (int i = 0; i < 5; i++) {
+        double side = rand() % 1000 + 100; // 100–1100 мм
+        sheets.push_back(new SquareSheet(side, 5, 7850));
+    }
+
+    // 7 прямоугольных
+    for (int i = 0; i < 7; i++) {
+        double w = rand() % 1000 + 100;
+        double l = rand() % 1000 + 100;
+        sheets.push_back(new RectangleSheet(w, l, 5, 7850));
+    }
+
+    // 3 треугольных
+    for (int i = 0; i < 3; i++) {
+        double a = rand() % 1000 + 100;
+        double b = rand() % 1000 + 100;
+        sheets.push_back(new TriangleSheet(a, b, 5, 7850));
+    }
+
+    double totalArea = 0, totalWeight = 0;
+
+    cout << fixed << setprecision(2);
+    for (auto s : sheets) {
+        s->Info();
+        totalArea += s->Area();
+        totalWeight += s->Weight();
+    }
+
+    cout << "\nСуммарная площадь всех листов: " << totalArea << " мм²\n";
+    cout << "Суммарный вес всех листов: " << totalWeight << " кг\n";
+
+    // Очистка памяти
+    for (auto s : sheets) delete s;
+
+    return 0;
+}
+
+============================================================
+
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <cstdlib>
+#include <fstream>
+using namespace std;
+
+double sigmoid(double x) {
+    return 1.0 / (1.0 + exp(-x));
+}
+
+double sigmoid_derivative(double x) {
+    return x * (1.0 - x);
+}
+
+int main() {
+    // XOR данные
+    vector<vector<double>> inputs = {{0,0},{0,1},{1,0},{1,1}};
+    vector<double> outputs = {0,1,1,0};
+
+    // Инициализация весов случайными числами
+    double w1 = ((double) rand() / RAND_MAX) - 0.5;
+    double w2 = ((double) rand() / RAND_MAX) - 0.5;
+    double w3 = ((double) rand() / RAND_MAX) - 0.5;
+    double w4 = ((double) rand() / RAND_MAX) - 0.5;
+    double w5 = ((double) rand() / RAND_MAX) - 0.5;
+    double w6 = ((double) rand() / RAND_MAX) - 0.5;
+
+    double b1 = 0.0, b2 = 0.0, b3 = 0.0;
+    double lr = 0.1;
+
+    // Открываем файл в режиме добавления
+    ofstream log("weights_log.txt", ios::app);
+
+    // Обучение
+    for(int epoch=0; epoch<10000; epoch++) {
+        for(int i=0; i<inputs.size(); i++) {
+            double x1 = inputs[i][0];
+            double x2 = inputs[i][1];
+            double target = outputs[i];
+
+            // --- Прямой проход ---
+            double h1 = sigmoid(x1*w1 + x2*w2 + b1);
+            double h2 = sigmoid(x1*w3 + x2*w4 + b2);
+            double out = sigmoid(h1*w5 + h2*w6 + b3);
+
+            // --- Ошибка ---
+            double error = target - out;
+
+            // --- Обратное распространение ---
+            double d_out = error * sigmoid_derivative(out);
+
+            double d_h1 = d_out * w5 * sigmoid_derivative(h1);
+            double d_h2 = d_out * w6 * sigmoid_derivative(h2);
+
+            // --- Обновление весов ---
+            w5 += lr * d_out * h1;
+            w6 += lr * d_out * h2;
+            b3 += lr * d_out;
+
+            w1 += lr * d_h1 * x1;
+            w2 += lr * d_h1 * x2;
+            b1 += lr * d_h1;
+
+            w3 += lr * d_h2 * x1;
+            w4 += lr * d_h2 * x2;
+            b2 += lr * d_h2;
+        }
+
+        // Сохраняем веса после каждой эпохи
+        log << "Epoch " << epoch << ": "
+            << w1 << " " << w2 << " " << w3 << " "
+            << w4 << " " << w5 << " " << w6 << " "
+            << b1 << " " << b2 << " " << b3 << endl;
+    }
+
+    log.close();
+
+    // Проверка
+    for(auto &inp : inputs) {
+        double h1 = sigmoid(inp[0]*w1 + inp[1]*w2 + b1);
+        double h2 = sigmoid(inp[0]*w3 + inp[1]*w4 + b2);
+        double out = sigmoid(h1*w5 + h2*w6 + b3);
+        cout << inp[0] << " XOR " << inp[1] << " = " << out << endl;
+    }
+}
+
+========================================================
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <map>
+using namespace std;
+
+// Загружаем словарь из файла
+map<string,string> loadDictionary(const string& filename) {
+    map<string,string> dict;
+    ifstream in(filename);
+    string input, output;
+    while(in >> input >> output) {
+        dict[input] = output;
+    }
+    return dict;
+}
+
+// Сохраняем словарь в файл
+void saveDictionary(const string& filename, const map<string,string>& dict) {
+    ofstream out(filename);
+    for(auto& pair : dict) {
+        out << pair.first << " " << pair.second << endl;
+    }
+}
+
+int main() {
+    string filename = "dialog_log.txt";
+    map<string,string> dictionary = loadDictionary(filename);
+
+    cout << "ИИ готов к диалогу! Напиши что-нибудь:" << endl;
+
+    string userInput;
+    while(true) {
+        cout << "Ты: ";
+        getline(cin, userInput);
+
+        if(userInput == "exit") break;
+
+        // Проверяем, знает ли ИИ ответ
+        if(dictionary.find(userInput) != dictionary.end()) {
+            cout << "ИИ: " << dictionary[userInput] << endl;
+        } else {
+            cout << "ИИ: Я не знаю, как ответить. Напиши правильный ответ:" << endl;
+            string correctAnswer;
+            getline(cin, correctAnswer);
+            dictionary[userInput] = correctAnswer;
+            saveDictionary(filename, dictionary);
+            cout << "ИИ: Запомнил!" << endl;
+        }
+    }
+
+    return 0;
+}
+
