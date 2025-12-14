@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "/home/folzi/.nuget/packages/": {}
+    "/home/irovbyte/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/folzi/main/cs/cs.csproj",
+      "projectUniqueName": "/home/irovbyte/main/cs/cs.csproj",
       "projectName": "cs",
-      "projectPath": "/home/folzi/main/cs/cs.csproj",
-      "packagesPath": "/home/folzi/.nuget/packages/",
-      "outputPath": "/home/folzi/main/cs/obj/",
+      "projectPath": "/home/irovbyte/main/cs/cs.csproj",
+      "packagesPath": "/home/irovbyte/.nuget/packages/",
+      "outputPath": "/home/irovbyte/main/cs/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/folzi/.nuget/NuGet/NuGet.Config"
+        "/home/irovbyte/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
